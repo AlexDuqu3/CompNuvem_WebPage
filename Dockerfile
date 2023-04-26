@@ -13,6 +13,12 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
+ARG API_URL
+ARG SOCKETS_URL 
+
+ENV VUE_APP_SOCKETS_URL=$SOCKETS_URL
+ENV VUE_APP_API_URL=$API_URL
+
 # Build the Vue.js application
 RUN npm run build
 

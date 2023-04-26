@@ -12,6 +12,10 @@ import Toaster from "@meforma/vue-toaster"
 import FieldErrorMessage from "./components/global/FieldErrorMessage.vue"
 import ConfirmationDialog from "./components/global/ConfirmationDialog.vue"
 
+const apidomain = process.env.VUE_APP_API_URL
+
+axios.defaults.baseURL =  apidomain + "/api" 
+
 let toastOptions = {
     position: 'top',
     timeout: 3000,
@@ -19,7 +23,7 @@ let toastOptions = {
 }
 const socketIO = new VueSocketIO({ 
     debug: true, 
-    connection: 'http://192.168.1.79:3001', 
+    connection: process.env.VUE_APP_SOCKETS_URL, 
     vuex: { 
         store, 
         actionPrefix: 'SOCKET_', 
@@ -29,11 +33,13 @@ const socketIO = new VueSocketIO({
 
 const app = createApp(App).use(store).use(router).use(Toaster, toastOptions).use(socketIO) 
 
+app.config.globalProperties.$axios = axios 
+app.config.globalProperties.$serverUrl = apidomain
+
 store.$toast = app.$toast
 store.$socket = socketIO.io 
-axios.defaults.baseURL = "http://192.168.1.79:8081/api" 
-app.config.globalProperties.$axios = axios 
-app.config.globalProperties.$serverUrl = "http://192.168.1.79:8081"
+
+
 
 app.component('field-error-message', FieldErrorMessage)
 app.component('confirmation-dialog', ConfirmationDialog)

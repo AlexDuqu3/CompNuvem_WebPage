@@ -59,6 +59,7 @@ export default {
   methods: {
     login() {
       this.errors = null;
+      console.log(this.$axios.defaults.baseURL)
       this.$axios
         .post("login", this.credentials)
         .then((response) => {
